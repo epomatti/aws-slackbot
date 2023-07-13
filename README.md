@@ -1,1 +1,2 @@
-# aws-slackbot
+# AWS Slack Bot
+
