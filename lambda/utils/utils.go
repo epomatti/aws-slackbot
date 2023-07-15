@@ -9,18 +9,20 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 )
 
-func Error(body string, statusCode int, err error) (events.APIGatewayProxyResponse, error) {
+type Response = events.APIGatewayProxyResponse
+
+func Error(body string, statusCode int, err error) (Response, error) {
 	log.Println(err)
-	return events.APIGatewayProxyResponse{
+	return Response{
 		Body:       body,
 		StatusCode: statusCode,
 	}, err
 }
 
-func Ok(body string) (events.APIGatewayProxyResponse, error) {
-	return events.APIGatewayProxyResponse{
+func Ok(body string, statusCode int) (Response, error) {
+	return Response{
 		Body:       body,
-		StatusCode: 200,
+		StatusCode: statusCode,
 	}, nil
 }
 

@@ -39,7 +39,7 @@ func handler(r Request) (Response, error) {
 		return utils.Error("Error starting instances", 500, err)
 	}
 
-	return utils.Ok("Instance starting")
+	return utils.Ok("Instance starting", 200)
 }
 
 func main() {
