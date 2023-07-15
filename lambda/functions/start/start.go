@@ -2,69 +2,44 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"encoding/json"
+	"slackbot/utils"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 )
 
-// var (
-// 	// DefaultHTTPGetAddress Default Address
-// 	DefaultHTTPGetAddress = "https://checkip.amazonaws.com"
+type Request = events.APIGatewayProxyRequest
+type Response = events.APIGatewayProxyResponse
 
-// 	// ErrNoIP No IP found in response
-// 	ErrNoIP = errors.New("No IP in HTTP response")
+type Body struct {
+	InstanceIds []string `json:"instanceIds"`
+}
 
-// 	// ErrNon200Response non 200 status code in response
-// 	ErrNon200Response = errors.New("Non 200 Response found")
-// )
+func handler(r Request) (Response, error) {
 
-func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	println("STARTING")
-
-	cfg, err := config.LoadDefaultConfig(context.TODO())
+	cfg, err := utils.NewConfig()
 	if err != nil {
-		panic("configuration error, " + err.Error())
+		return utils.Error("Failed ot load AWS config", 500, err)
 	}
-	instances := []string{"i-0f4902ae32fc5397c"}
+
+	var body Body
+	err = json.Unmarshal([]byte(r.Body), &body)
+	if err != nil {
+		return utils.Error("Failed to process body", 400, err)
+	}
+
 	client := ec2.NewFromConfig(cfg)
 	input := &ec2.StartInstancesInput{
-		InstanceIds: instances,
+		InstanceIds: body.InstanceIds,
+	}
+	_, err = client.StartInstances(context.TODO(), input)
+	if err != nil {
+		return utils.Error("Error starting instances", 500, err)
 	}
 
-	// svc.stop
-	resp, err := client.StartInstances(context.TODO(), input)
-
-	if err == nil {
-		fmt.Println(resp)
-	} else {
-		fmt.Println(err.Error())
-	}
-
-	// resp, err := http.Get(DefaultHTTPGetAddress)
-	// if err != nil {
-	// 	return events.APIGatewayProxyResponse{}, err
-	// }
-
-	// if resp.StatusCode != 200 {
-	// 	return events.APIGatewayProxyResponse{}, ErrNon200Response
-	// }
-
-	// ip, err := io.ReadAll(resp.Body)
-	// if err != nil {
-	// 	return events.APIGatewayProxyResponse{}, err
-	// }
-
-	// if len(ip) == 0 {
-	// 	return events.APIGatewayProxyResponse{}, ErrNoIP
-	// }
-
-	return events.APIGatewayProxyResponse{
-		Body:       "OK",
-		StatusCode: 200,
-	}, nil
+	return utils.Ok("Instance starting")
 }
 
 func main() {
