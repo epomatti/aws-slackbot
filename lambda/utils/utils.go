@@ -11,10 +11,9 @@ import (
 
 type Response = events.APIGatewayProxyResponse
 
-func Error(body string, statusCode int, err error) (Response, error) {
+func Error(statusCode int, err error) (Response, error) {
 	log.Println(err)
 	return Response{
-		Body:       body,
 		StatusCode: statusCode,
 	}, err
 }
