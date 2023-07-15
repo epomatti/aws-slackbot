@@ -1,5 +1,5 @@
 {
-    "body": "{\"message\": \"hello world\"}",
+    "body": "{\"instanceIds\": [\"i-0f4902ae32fc5397c\"] }",
     "resource": "/hello",
     "path": "/hello",
     "httpMethod": "GET",
