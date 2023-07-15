@@ -10,23 +10,23 @@ provider "aws" {
   region = var.region
 }
 
-module "iam_lambda" {
-  source = "./modules/iam/lambda"
-}
+# module "iam_lambda" {
+#   source = "./modules/iam/lambda"
+# }
 
-module "lambda_stop" {
-  source             = "./modules/lambda"
-  name               = "slackbot-stop"
-  execution_role_arn = module.iam_lambda.execution_role_arn
-}
+# module "lambda_stop" {
+#   source             = "./modules/lambda"
+#   name               = "slackbot-stop"
+#   execution_role_arn = module.iam_lambda.execution_role_arn
+# }
 
 module "bucket" {
   source = "./modules/s3"
 }
 
-module "apigw" {
-  source = "./modules/apigw"
-}
+# module "apigw" {
+#   source = "./modules/apigw"
+# }
 
 module "vpc" {
   source = "./modules/vpc"
