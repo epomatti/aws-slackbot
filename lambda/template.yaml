@@ -24,6 +24,10 @@ Resources:
       FunctionName: "stop"
       CodeUri: .
       Handler: stop
+      # Policies:
+      #   - AWSLambdaBasicExecutionRole
+      #   - AWSLambda_ReadOnlyAccess
+      #   - AWSXrayWriteOnlyAccess
       Events:
         CatchAll:
           Type: Api
@@ -47,8 +51,6 @@ Resources:
             RestApiId: !Ref SlackBotAPI
             Path: /start
             Method: POST
-
-
 # Outputs:
 #   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
 #   # Find out more about other implicit resources you can reference within SAM
