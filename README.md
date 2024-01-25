@@ -21,6 +21,8 @@ Deploying
 sam deploy --guided
 ```
 
+Troubleshooting: https://docs.aws.amazon.com/chatbot/latest/adminguide/chatbot-troubleshooting.html
+
 References:
 - [Go project structure for Lambda](https://leonardqmarcq.com/posts/go-project-structure-for-api-gateway-lambda-with-aws-sam)
 - [AWS Stop Instances in Go](https://github.com/awsdocs/aws-doc-sdk-examples/blob/main/gov2/ec2/common/StopInstancesv2.go)
