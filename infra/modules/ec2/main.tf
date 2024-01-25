@@ -4,8 +4,8 @@ resource "aws_iam_instance_profile" "slackbot" {
 }
 
 resource "aws_instance" "slackbot" {
-  ami           = "ami-08fdd91d87f63bb09"
-  instance_type = "t4g.nano"
+  ami           = "ami-0748d13ffbc370c2b"
+  instance_type = "t4g.micro"
 
   associate_public_ip_address = true
   subnet_id                   = var.subnet
@@ -14,13 +14,15 @@ resource "aws_instance" "slackbot" {
   availability_zone    = var.az
   iam_instance_profile = aws_iam_instance_profile.slackbot.id
 
+  user_data = file("${path.module}/userdata.sh")
+
   metadata_options {
     http_endpoint = "enabled"
     http_tokens   = "required"
   }
 
-  monitoring    = false
-  ebs_optimized = false
+  monitoring    = true
+  ebs_optimized = true
 
   root_block_device {
     encrypted = true
